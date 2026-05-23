@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+dist/
+build/
+
+# trained models and data artifacts
+models/
+*.safetensors
+*.bin
+*.gguf
+data/*.jsonl
+!examples/*.jsonl
+
+.env
+.env.local
