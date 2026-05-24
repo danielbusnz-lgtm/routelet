@@ -11,6 +11,7 @@ build/
 
 # trained models and data artifacts
 models/
+checkpoints/
 *.safetensors
 *.bin
 *.gguf

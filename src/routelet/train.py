@@ -18,7 +18,7 @@ from sklearn.pipeline import make_pipeline
 from routelet.data import Intent, load, load_dir
 
 TRAIN_DIR = "data"
-EVAL_FILE = "examples/intents.seed.jsonl"
+EVAL_FILE = "evals/holdout.jsonl"
 MODEL_OUT = Path("models/baseline.joblib")
 
 
