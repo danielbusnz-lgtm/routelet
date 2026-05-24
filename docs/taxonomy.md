@@ -25,12 +25,16 @@ Use these when a command looks like it could fit two intents.
    `memory`. A question answered from world knowledge is `chat`.
    "what's my wifi password" is `memory`; "what's the capital of france" is `chat`.
 
-3. **Storing a fact is always `memory`.** "remember X" is `memory` even when phrased as a
-   command, not `integration`.
+3. **Storing a fact is `memory`, but only with an explicit storage verb.** "remember/note/save X"
+   is `memory` even when it looks like another intent: "remember that i like to play despacito on
+   spotify" is `memory`, not `integration`. A bare preference with no storage verb is not `memory`:
+   "i like to check my email" is `chat`.
 
 4. **Screen vs service decides `find_action` vs `integration`.** Naming a visible UI element
    ("the play button", "the search bar") is `find_action`. Naming an app or service capability
-   ("on spotify", "my email") is `integration`.
+   ("on spotify", "my email") is `integration`. When both appear, an explicit UI verb (click, tap,
+   scroll to) on a named element wins for `find_action`: "click on the song Sicko Mode in spotify"
+   is `find_action`, not `integration`, even though Spotify is named.
 
 ## Tie-breaker
 
