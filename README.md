@@ -11,6 +11,8 @@ Early days. The plan:
 3. Serve it behind a fast HTTP endpoint.
 4. Prove it matches the LLM baseline on accuracy while being far faster and cheaper.
 
+The frozen intent set and labeling rules live in [docs/taxonomy.md](docs/taxonomy.md).
+
 ## Layout
 
 ```
