@@ -36,6 +36,7 @@ Tie-breakers for the tricky cases:
 - Two or more chained actions ("X and then Y") is agent, not integration.
 - A question answered from a stored personal fact is memory; from world knowledge it is chat.
 - A UI verb (click/tap/scroll) on a named element is find_action, even if an app is named.
+- Playback controls (skip, pause, next, volume) are integration, not find_action, unless a button is named.
 - "explain how to..." or "talk me through..." is chat, even when it names an app action."""
 
 INTENT_SCHEMA = {

@@ -34,7 +34,9 @@ Use these when a command looks like it could fit two intents.
    ("the play button", "the search bar") is `find_action`. Naming an app or service capability
    ("on spotify", "my email") is `integration`. When both appear, an explicit UI verb (click, tap,
    scroll to) on a named element wins for `find_action`: "click on the song Sicko Mode in spotify"
-   is `find_action`, not `integration`, even though Spotify is named.
+   is `find_action`, not `integration`, even though Spotify is named. Playback verbs (skip, pause,
+   next, volume) are service capabilities, so `integration`, unless a button is named ("click the
+   skip button" is `find_action`).
 
 ## Tie-breaker
 
