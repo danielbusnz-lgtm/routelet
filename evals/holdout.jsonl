@@ -122,3 +122,79 @@
 {"text": "is it weird that i talk to my computer all day", "intent": "chat"}
 {"text": "whats a good way to stay focused while working", "intent": "chat"}
 {"text": "do you think ai is gonna take over the world", "intent": "chat"}
+{"text": "uhh where do i tap to collapse the sidebar", "intent": "find_action"}
+{"text": "find the the pin icon to pin this message", "intent": "find_action"}
+{"text": "where's the three dot thing next to my comment on youtube", "intent": "find_action"}
+{"text": "click the the little eye to show the password", "intent": "find_action"}
+{"text": "where do i hit to add a new column in this sheet", "intent": "find_action"}
+{"text": "tap the swap camera button real quick", "intent": "find_action"}
+{"text": "where is the the airdrop option in this share sheet", "intent": "find_action"}
+{"text": "um wheres the resend code link on this screen", "intent": "find_action"}
+{"text": "scroll over to the second photo in this post", "intent": "find_action"}
+{"text": "where's the the slider to change playback speed", "intent": "find_action"}
+{"text": "click on the trash can icon next to this row", "intent": "find_action"}
+{"text": "where do i find the join with video button on zoom", "intent": "find_action"}
+{"text": "tap the the chevron to open the dropdown", "intent": "find_action"}
+{"text": "wheres the mark as unread thing in my inbox", "intent": "find_action"}
+{"text": "press the floating compose pencil bottom right", "intent": "find_action"}
+{"text": "where is the the toggle for two factor on this page", "intent": "find_action"}
+{"text": "click the apply coupon link at checkout", "intent": "find_action"}
+{"text": "open my notes find the grocery one and add paper towels", "intent": "agent"}
+{"text": "uhh check the traffic and if its bad leave a note for my carpool", "intent": "agent"}
+{"text": "look up tonights nba scores and drop them in the family chat", "intent": "agent"}
+{"text": "pull up sarahs number from contacts then call her", "intent": "agent"}
+{"text": "open figma duplicate this frame and rename it draft two", "intent": "agent"}
+{"text": "find a barber open late and stick it in my calendar plz", "intent": "agent"}
+{"text": "mute notifications and then start my pomodoro timer", "intent": "agent"}
+{"text": "check my steps for today and if im under ten thousand remind me to walk", "intent": "agent"}
+{"text": "um open the pdf scroll to page twelve and read me that part", "intent": "agent"}
+{"text": "grab the wifi name from settings and text it to my guest", "intent": "agent"}
+{"text": "open linkedin find the recruiter who messaged me and reply thanks", "intent": "agent"}
+{"text": "look at my fridge inventory and order whatever im out of", "intent": "agent"}
+{"text": "find a quiet cafe with wifi and navigate me there then mute my phone", "intent": "agent"}
+{"text": "scan this receipt log the total and file it under march expenses", "intent": "agent"}
+{"text": "open youtube find that tutorial i watched and add it to watch later", "intent": "agent"}
+{"text": "check who texted me last and read it back then mark it read", "intent": "agent"}
+{"text": "lower the thermostat a couple degrees", "intent": "integration"}
+{"text": "uhh order me an uber to the office", "intent": "integration"}
+{"text": "whens sunset tonight", "intent": "integration"}
+{"text": "throw this article in my read later", "intent": "integration"}
+{"text": "skip ahead like a minute in this podcast", "intent": "integration"}
+{"text": "find me a ramen spot within walking distance", "intent": "integration"}
+{"text": "dm taylor on instagram that im outside", "intent": "integration"}
+{"text": "crank the bass up on this song", "intent": "integration"}
+{"text": "whats the exchange rate for euros right now", "intent": "integration"}
+{"text": "snap a pic of this whiteboard", "intent": "integration"}
+{"text": "reorder my usual from the coffee app", "intent": "integration"}
+{"text": "plz mark my last slack message as unread", "intent": "integration"}
+{"text": "queue up the next episode of the office", "intent": "integration"}
+{"text": "whats my battery percentage at", "intent": "integration"}
+{"text": "venmo my roommate twenty bucks for pizza", "intent": "integration"}
+{"text": "turn on the hallway lamp", "intent": "integration"}
+{"text": "uhh jot down that my seat for the concert is row m", "intent": "memory"}
+{"text": "keep track of my checking account ending in 4417", "intent": "memory"}
+{"text": "make a note that my therapist is on tuesdays at 4", "intent": "memory"}
+{"text": "remember i swim laps every other morning", "intent": "memory"}
+{"text": "save that my storage unit code is star nine nine", "intent": "memory"}
+{"text": "whats my storage unit code again", "intent": "memory"}
+{"text": "log that i switched my insurance to bluecross", "intent": "memory"}
+{"text": "remind me which gate my flight leaves from", "intent": "memory"}
+{"text": "dont forget my kid gets picked up at 3 on wednesdays", "intent": "memory"}
+{"text": "what did i tell you about my desk number at work", "intent": "memory"}
+{"text": "put it down that im cutting out caffeine this month", "intent": "memory"}
+{"text": "store that my mechanic is over on fifth street", "intent": "memory"}
+{"text": "uhh what was my reservation name for the restaurant again", "intent": "memory"}
+{"text": "note that my nephews birthday is the 19th", "intent": "memory"}
+{"text": "save my preferred pharmacy as the one on elm", "intent": "memory"}
+{"text": "whats the name of my emergency contact i had you save", "intent": "memory"}
+{"text": "how do i unfollow someone on instagram without them knowing", "intent": "chat"}
+{"text": "whats the deal with all the song skipping limits on free spotify", "intent": "chat"}
+{"text": "is it actually rude to leave a slack message on read", "intent": "chat"}
+{"text": "uhh how does a recurring calendar event even work", "intent": "chat"}
+{"text": "why do my texts turn green sometimes instead of blue", "intent": "chat"}
+{"text": "whats the longest river in the world", "intent": "chat"}
+{"text": "how would you explain compound interest to a kid", "intent": "chat"}
+{"text": "do you get bored when im not talking to you", "intent": "chat"}
+{"text": "whats a good comeback when someone says youre overthinking", "intent": "chat"}
+{"text": "how come some emails go straight to spam", "intent": "chat"}
+{"text": "is whispering actually worse for your voice than talking", "intent": "chat"}
