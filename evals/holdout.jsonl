@@ -29,7 +29,96 @@
 {"text": "dont forget that we need to write docs for this project", "intent": "memory"}
 {"text": "make sure to save that my name is Bob", "intent": "memory"}
 {"text": "how old am I?", "intent": "memory"}
+{"text": "make sure you know that im 12?", "intent": "memory"}
 {"text": "open youtube, search for lofi, play the top result", "intent": "agent"}
 {"text": "find the cheapest flight to tokyo and book it", "intent": "agent"}
 {"text": "can you open up my email, then remember my email address", "intent": "agent"}
 {"text": "can you open up youtube and search the news", "intent": "agent"}
+{"text": "why is daddy donald trump such a bad president", "intent": "chat"}
+{"text": "whats up with the weather today, its like where is it?", "intent": "chat"}
+{"text": "open up my email and send me a message saying, what is the weather today?", "intent": "integration"}
+{"text": "save that my wifi password is danny byron", "intent": "memory"}
+{"text": "how do i set up my spotify integration?", "intent": "chat"}
+{"text": "show me where that skip next song on spotify button is", "intent": "find_action"}
+{"text": "find me the best restraunts nearby", "intent": "integration"}
+{"text": "show me where america is on the map", "intent": "integration"}
+{"text": "can you show me where the chat button is", "intent": "find_action"}
+{"text": "can you open up the uhh the google maps and then look at local kebab shops for me please thanks bro", "intent": "agent"}
+{"text": "can you skip this song and then play sicko mode on spotify", "intent": "agent"}
+{"text": "can you open up github on google and then go to my most recent repo plz", "intent": "agent"}
+{"text": "open github, press my profile, change name to daniel", "intent": "agent"}
+{"text": "find me some cool songs and then play that for me", "intent": "agent"}
+{"text": "talk about ur life", "intent": "chat"}
+{"text": "when does the sun come up", "intent": "chat"}
+{"text": "can you play remember my name", "intent": "integration"}
+{"text": "whats my name on spotify", "intent": "chat"}
+{"text": "open up a new tab on chrome and also try to type 123", "intent": "agent"}
+{"text": "dont forget to use the memory agent", "intent": "memory"}
+{"text": "my name is danny b and i was 11 then i turned 12 yesterday", "intent": "chat"}
+{"text": "if i asked you a question about myself what would you do?", "intent": "chat"}
+{"text": "where do i tap to start a new chat", "intent": "find_action"}
+{"text": "find the thumbs up button on this video", "intent": "find_action"}
+{"text": "uhh where is the like button on youtube", "intent": "find_action"}
+{"text": "click the follow button on this profile", "intent": "find_action"}
+{"text": "where's the uh the gear icon for settings", "intent": "find_action"}
+{"text": "i was wondering if you could find the next page arrow", "intent": "find_action"}
+{"text": "tap the the microphone icon to record", "intent": "find_action"}
+{"text": "where do i click to upload a file here", "intent": "find_action"}
+{"text": "press the play button on this video plz", "intent": "find_action"}
+{"text": "hey can u scroll down to the footer", "intent": "find_action"}
+{"text": "wheres the new playlist button in spotify", "intent": "find_action"}
+{"text": "click on the the star to favorite it", "intent": "find_action"}
+{"text": "find me the edit button on this post", "intent": "find_action"}
+{"text": "where is the the cart icon up top", "intent": "find_action"}
+{"text": "tap the filter button at the top of the list", "intent": "find_action"}
+{"text": "um where do i go to click the report button", "intent": "find_action"}
+{"text": "select the bold option in the toolbar", "intent": "find_action"}
+{"text": "where's the reply all button in gmail", "intent": "find_action"}
+{"text": "open my email and forward the latest one to my boss", "intent": "agent"}
+{"text": "skip this track and then play sicko mode", "intent": "agent"}
+{"text": "open github, go to my repo, and delete the old branch", "intent": "agent"}
+{"text": "can you like check the weather and then text my mom if its gonna rain", "intent": "agent"}
+{"text": "uhh open spotify and then make me a new playlist for working out", "intent": "agent"}
+{"text": "search for a cheap flight to vegas and book the cheapest one", "intent": "agent"}
+{"text": "i was wondering if you could find a nearby gym and add it to my maps", "intent": "agent"}
+{"text": "pause the song and then turn up the volume bro", "intent": "agent"}
+{"text": "open my calendar and move my 3pm meeting to friday", "intent": "agent"}
+{"text": "find the top news story and then read it out to me plz", "intent": "agent"}
+{"text": "open whatsapp and reply to the last message from alex", "intent": "agent"}
+{"text": "look up a banana bread recipe and add the stuff to my shopping list", "intent": "agent"}
+{"text": "um can you open youtube search lofi and then play the first one", "intent": "agent"}
+{"text": "take a screenshot and then send it to my email", "intent": "agent"}
+{"text": "is it possible to skip songs on spotify", "intent": "chat"}
+{"text": "talk me through sending an email to someone", "intent": "chat"}
+{"text": "how would i go about checking my email", "intent": "chat"}
+{"text": "whats the weather like usually in boston in may", "intent": "chat"}
+{"text": "uhh how do i even make a playlist on spotify", "intent": "chat"}
+{"text": "can you explain like how forwarding an email works", "intent": "chat"}
+{"text": "whats the deal with all these slack channels anyway", "intent": "chat"}
+{"text": "is it hard to set up a github repo", "intent": "chat"}
+{"text": "how does the spotify shuffle thing actually pick songs", "intent": "chat"}
+{"text": "make sure you save that my middle name is alan", "intent": "memory"}
+{"text": "keep track of the fact that im allergic to shellfish", "intent": "memory"}
+{"text": "uhh log that my new phone number is five five five oh one two three", "intent": "memory"}
+{"text": "write down that my hotel room is 412", "intent": "memory"}
+{"text": "can you jot down that i parked in section c", "intent": "memory"}
+{"text": "note down that my passport expires in june", "intent": "memory"}
+{"text": "store that my office wifi network is called bluefox", "intent": "memory"}
+{"text": "what was that thing i told you about my coffee order", "intent": "memory"}
+{"text": "i was wondering if you could remind me what my gate number was", "intent": "memory"}
+{"text": "hey can u tell me what my favorite restaurant is again", "intent": "memory"}
+{"text": "uhh can you play some lofi beats", "intent": "integration"}
+{"text": "skip this one", "intent": "integration"}
+{"text": "text my sister that im running late plz", "intent": "integration"}
+{"text": "open up google maps", "intent": "integration"}
+{"text": "set a timer for like twenty minutes", "intent": "integration"}
+{"text": "whats the weather gonna be tomorrow", "intent": "integration"}
+{"text": "hey can u turn the volume down a little", "intent": "integration"}
+{"text": "send a slack to the design channel saying im done", "intent": "integration"}
+{"text": "find me a coffee shop thats open right now", "intent": "integration"}
+{"text": "i was wondering if you could add eggs to my grocery list", "intent": "integration"}
+{"text": "post this pic to my story", "intent": "integration"}
+{"text": "play the new kendrick album", "intent": "integration"}
+{"text": "is it weird that i talk to my computer all day", "intent": "chat"}
+{"text": "whats a good way to stay focused while working", "intent": "chat"}
+{"text": "do you think ai is gonna take over the world", "intent": "chat"}
