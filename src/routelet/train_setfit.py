@@ -23,7 +23,7 @@ from setfit import SetFitModel, Trainer, TrainingArguments
 from sklearn.metrics import classification_report
 from sklearn.model_selection import StratifiedShuffleSplit
 
-from routelet.data import Intent, Example, load, load_dir
+from routelet.data import Example, Intent, load, load_dir
 from routelet.preprocess import preprocess
 
 BASE = "BAAI/bge-small-en-v1.5"
@@ -177,7 +177,10 @@ def threshold_analysis(
 
     def _print_table(conf: np.ndarray, label: str) -> None:
         print(f"\n--- confidence threshold analysis (124-row holdout, {label}) ---")
-        print(f"{'threshold':>10}  {'deferred':>10}  {'defer%':>8}  {'kept_acc':>10}  {'defer_acc':>10}")
+        print(
+            f"{'threshold':>10}  {'deferred':>10}  {'defer%':>8}  "
+            f"{'kept_acc':>10}  {'defer_acc':>10}"
+        )
         for tau in [0.55, 0.60, 0.65, 0.70]:
             above = conf >= tau
             below = ~above
@@ -207,7 +210,10 @@ def threshold_analysis(
         print("\nlow-confidence rows on holdout (raw T=1.0 max-prob < 0.90):")
         for idx, c, true_lbl, pred_lbl in uncertain:
             mark = "OK" if true_lbl == pred_lbl else "WRONG"
-            print(f"  [{idx}] conf={c:.3f} true={true_lbl!r} pred={pred_lbl!r} [{mark}]  {test_examples[idx].text!r}")
+            print(
+                f"  [{idx}] conf={c:.3f} true={true_lbl!r} pred={pred_lbl!r} "
+                f"[{mark}]  {test_examples[idx].text!r}"
+            )
 
 
 def main() -> None:
@@ -271,7 +277,7 @@ def main() -> None:
         num_epochs=2,
         sampling_strategy="unique",
     )
-    print(f"\nTrainingArguments:")
+    print("\nTrainingArguments:")
     print(f"  batch_size:        {args.batch_size}")
     print(f"  num_epochs:        {args.num_epochs}")
     print(f"  sampling_strategy: {args.sampling_strategy}")
@@ -298,8 +304,8 @@ def main() -> None:
     from sklearn.metrics import confusion_matrix
     cm = confusion_matrix(true, preds, labels=labels)
     print("confusion matrix (rows=true, cols=pred):")
-    col_width = max(len(l) for l in labels) + 2
-    header = " " * col_width + "".join(f"{l:>{col_width}}" for l in labels)
+    col_width = max(len(lbl) for lbl in labels) + 2
+    header = " " * col_width + "".join(f"{lbl:>{col_width}}" for lbl in labels)
     print(header)
     for i, row_label in enumerate(labels):
         row_str = f"{row_label:<{col_width}}" + "".join(f"{v:>{col_width}}" for v in cm[i])

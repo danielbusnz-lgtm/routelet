@@ -11,7 +11,7 @@ Over-redaction is acceptable; leaking is not.
 import re
 
 _SECRET = re.compile(
-    r"(?i)\b(password|passcode|pin|ssn|secret|token|api\s*key|api\s*secret|credit card|card number)\b.*$",
+    r"(?i)\b(password|passcode|pin|ssn|secret|token|api\s*key|api\s*secret|credit card|card number)\b.*$",  # noqa: E501
     re.MULTILINE,
 )
 _EMAIL = re.compile(r"(?i)[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}")

@@ -185,7 +185,10 @@ def main() -> None:
         "temperature": temperature,
     }
     Path(HEAD_OUT).write_text(json.dumps(head_data, indent=2) + "\n")
-    print(f"[head] saved {HEAD_OUT}  (coef {head.coef_.shape}, labels {labels}, T={temperature:.4f})")
+    print(
+        f"[head] saved {HEAD_OUT}  (coef {head.coef_.shape}, "
+        f"labels {labels}, T={temperature:.4f})"
+    )
 
     # Copy tokenizer for the Rust consumer.
     shutil.copy(f"{SETFIT_DIR}/tokenizer.json", TOKENIZER_OUT)
@@ -198,7 +201,7 @@ def main() -> None:
     # File sizes.
     fp32_bytes = Path(EMBEDDER_OUT).stat().st_size
     int8_bytes = Path(EMBEDDER_INT8_OUT).stat().st_size
-    print(f"\nfile sizes:")
+    print("\nfile sizes:")
     print(f"  {EMBEDDER_OUT}: {fp32_bytes / 1e6:.1f} MB")
     print(f"  {EMBEDDER_INT8_OUT}: {int8_bytes / 1e6:.1f} MB")
 
