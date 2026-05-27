@@ -1,0 +1,52 @@
+{"text": "mute the music", "tool": "spotify"}
+{"text": "crank it louder", "tool": "spotify"}
+{"text": "go back a song", "tool": "spotify"}
+{"text": "bump this track up in the queue", "tool": "spotify"}
+{"text": "i want to hear some kendrick", "tool": "spotify"}
+{"text": "put on something lo-fi while i work", "tool": "spotify"}
+{"text": "stop the song", "tool": "spotify"}
+{"text": "what album is this from", "tool": "spotify"}
+{"text": "save this track to my library", "tool": "spotify"}
+{"text": "repeat this song", "tool": "spotify"}
+{"text": "any new messages in my inbox", "tool": "gmail"}
+{"text": "write back to the recruiter and say i'm interested", "tool": "gmail"}
+{"text": "pull up my drafts", "tool": "gmail"}
+{"text": "get rid of all the marketing junk", "tool": "gmail"}
+{"text": "did the client respond yet", "tool": "gmail"}
+{"text": "flag the message from my landlord as important", "tool": "gmail"}
+{"text": "send a note to the whole team about the deadline", "tool": "gmail"}
+{"text": "has anyone emailed me about the invoice", "tool": "gmail"}
+{"text": "shoot a reply to the therapist confirming thursday", "tool": "gmail"}
+{"text": "empty the trash folder in my mail", "tool": "gmail"}
+{"text": "star this repo", "tool": "github"}
+{"text": "what's the status of my latest build", "tool": "github"}
+{"text": "who left a comment on my pull request", "tool": "github"}
+{"text": "squash and merge the feature branch", "tool": "github"}
+{"text": "open a ticket for the crash we saw yesterday", "tool": "github"}
+{"text": "unwatch that noisy repository", "tool": "github"}
+{"text": "show me all unresolved review comments on my PR", "tool": "github"}
+{"text": "tag v1.2.0 on the main branch", "tool": "github"}
+{"text": "list contributors to this project", "tool": "github"}
+{"text": "what did i push last tuesday", "tool": "github"}
+{"text": "find me a beginner piano lesson video", "tool": "youtube"}
+{"text": "pull up that documentary about the cia on yt", "tool": "youtube"}
+{"text": "i want to watch a ted talk about sleep", "tool": "youtube"}
+{"text": "get me a video on how to sharpen a knife", "tool": "youtube"}
+{"text": "show me the highlights reel from the superbowl on yt", "tool": "youtube"}
+{"text": "open the channel for that cooking guy i follow", "tool": "youtube"}
+{"text": "dislike this video", "tool": "youtube"}
+{"text": "slow this down to half speed", "tool": "youtube"}
+{"text": "find a video explaining what a transformer model is", "tool": "youtube"}
+{"text": "save this to watch later on yt", "tool": "youtube"}
+{"text": "set a reminder for my dentist appointment", "tool": "no_tool"}
+{"text": "stream the next episode of succession on hbo", "tool": "no_tool"}
+{"text": "turn on the lights in the kitchen", "tool": "no_tool"}
+{"text": "what time is it in tokyo", "tool": "no_tool"}
+{"text": "add eggs to my shopping list", "tool": "no_tool"}
+{"text": "book me a flight to denver next weekend", "tool": "no_tool"}
+{"text": "open slack and check the dev channel", "tool": "no_tool"}
+{"text": "navigate home", "tool": "no_tool"}
+{"text": "call mom", "tool": "no_tool"}
+{"text": "translate this to french", "tool": "no_tool"}
+{"text": "queue up the next office episode", "tool": "no_tool"}
+{"text": "post this photo to instagram", "tool": "no_tool"}

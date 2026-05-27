@@ -43,8 +43,8 @@ class TestJsonlSchema(unittest.TestCase):
                         msg=f"{path.name}:{n} unknown intent {row['intent']!r}",
                     )
 
+    @unittest.skipUnless(DATA_FILES, "data/*.jsonl is gitignored; present only locally")
     def test_data_files(self) -> None:
-        self.assertTrue(DATA_FILES, "no .jsonl files found in data/")
         for path in DATA_FILES:
             self._check_file(path)
 
@@ -55,6 +55,7 @@ class TestJsonlSchema(unittest.TestCase):
 class TestTrainingPoolDedup(unittest.TestCase):
     """No two rows in the combined training pool share the same text."""
 
+    @unittest.skipUnless(DATA_FILES, "data/*.jsonl is gitignored; present only locally")
     def test_no_duplicate_texts(self) -> None:
         examples = load_dir(DATA_DIR)
         seen: dict[str, str] = {}  # text -> first filename
@@ -79,6 +80,7 @@ class TestHoldoutDisjointness(unittest.TestCase):
     def _norm(text: str) -> str:
         return text.strip().lower()
 
+    @unittest.skipUnless(DATA_FILES, "data/*.jsonl is gitignored; present only locally")
     def test_no_train_eval_overlap(self) -> None:
         train_norms = {self._norm(e.text) for e in load_dir(DATA_DIR)}
         holdout_norms = {self._norm(e.text) for e in load(HOLDOUT)}
