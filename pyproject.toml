@@ -13,12 +13,6 @@ train = [
     "datasets",
     "torch",
 ]
-# Only needed if you build out the optional HTTP endpoint (src/routelet/serve.py).
-serve = [
-    "fastapi",
-    "uvicorn",
-    "pydantic",
-]
 
 [build-system]
 requires = ["hatchling"]

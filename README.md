@@ -36,7 +36,6 @@ src/routelet/
 
   evaluate.py        the Claude LLM baseline (the accuracy ceiling), one call per row
   teacher.py         shared taxonomy prompt + schema + classify(), used by eval + ingest
-  serve.py           optional FastAPI endpoint (stub; Aegis runs the ONNX in-process)
 
 Scripts/             runnable tools (not library code)
   pull_samples.py    pull redacted samples from the proxy's R2 -> one JSONL
