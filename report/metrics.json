@@ -1,0 +1,49 @@
+{
+  "eval_n": 200,
+  "tfidf": {
+    "accuracy": 0.69
+  },
+  "setfit": {
+    "accuracy": 0.895
+  },
+  "haiku": {
+    "model": "claude-haiku-4-5",
+    "eval_n": 200,
+    "accuracy": 0.935,
+    "latency_p50_ms": 1007.0,
+    "latency_p95_ms": 1865.0,
+    "per_class": {
+      "find_action": {
+        "precision": 0.95,
+        "recall": 1.0,
+        "f1": 0.98,
+        "support": 40
+      },
+      "integration": {
+        "precision": 1.0,
+        "recall": 0.72,
+        "f1": 0.84,
+        "support": 39
+      },
+      "chat": {
+        "precision": 0.93,
+        "recall": 0.95,
+        "f1": 0.94,
+        "support": 40
+      },
+      "memory": {
+        "precision": 0.91,
+        "recall": 1.0,
+        "f1": 0.95,
+        "support": 40
+      },
+      "agent": {
+        "precision": 0.91,
+        "recall": 1.0,
+        "f1": 0.95,
+        "support": 41
+      }
+    },
+    "stale": false
+  }
+}

@@ -4,9 +4,6 @@ version = "0.0.1"
 description = "A tiny fine-tuned intent router. Classify text into intents in milliseconds, on-device."
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi",
-    "uvicorn",
-    "pydantic",
     "scikit-learn",
 ]
 
@@ -15,6 +12,12 @@ train = [
     "transformers",
     "datasets",
     "torch",
+]
+# Only needed if you build out the optional HTTP endpoint (src/routelet/serve.py).
+serve = [
+    "fastapi",
+    "uvicorn",
+    "pydantic",
 ]
 
 [build-system]
@@ -27,6 +30,8 @@ packages = ["src/routelet"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+# Throwaway prototypes, not held to the library's lint bar.
+extend-exclude = ["experiments"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
