@@ -11,7 +11,10 @@ from pathlib import Path
 
 
 class Intent(StrEnum):
-    """The label set, frozen. Definitions and boundary rules in docs/taxonomy.md.
+    """The label set. The first five are the real intents (definitions and
+    boundary rules in docs/taxonomy.md). NONE is the reject class: out-of-
+    distribution or garbled input the router should not act on, used to give the
+    model an explicit "I don't know" instead of confidently mislabeling junk.
 
     StrEnum gives two things we rely on: members serialize as plain strings, and
     Intent("typo") raises ValueError, which is how labels get validated on load.
@@ -22,6 +25,7 @@ class Intent(StrEnum):
     CHAT = "chat"
     MEMORY = "memory"
     AGENT = "agent"
+    NONE = "none"
 
 
 @dataclass(frozen=True, slots=True)

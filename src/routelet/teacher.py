@@ -44,9 +44,13 @@ Apply these boundary rules first for the tricky cases:
 If a command still fits more than one after these rules, pick the first match in this order:
 agent, memory, integration, find_action, chat."""
 
+# Real intents only: the teacher labels actual commands, never the reject class
+# (NONE), which is learned from generated OOD data, not from the LLM.
+_REAL_INTENTS = [i.value for i in Intent if i is not Intent.NONE]
+
 INTENT_SCHEMA = {
     "type": "object",
-    "properties": {"intent": {"type": "string", "enum": [i.value for i in Intent]}},
+    "properties": {"intent": {"type": "string", "enum": _REAL_INTENTS}},
     "required": ["intent"],
     "additionalProperties": False,
 }
