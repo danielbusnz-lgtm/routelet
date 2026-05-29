@@ -36,7 +36,7 @@
 {"text": "can you open up youtube and search the news", "intent": "agent"}
 {"text": "why is daddy donald trump such a bad president", "intent": "chat"}
 {"text": "whats up with the weather today, its like where is it?", "intent": "chat"}
-{"text": "open up my email and send me a message saying, what is the weather today?", "intent": "integration"}
+{"text": "open up my email and send me a message saying, what is the weather today?", "intent": "agent"}
 {"text": "save that my wifi password is danny byron", "intent": "memory"}
 {"text": "how do i set up my spotify integration?", "intent": "chat"}
 {"text": "show me where that skip next song on spotify button is", "intent": "find_action"}
