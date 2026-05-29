@@ -6,11 +6,17 @@
   "setfit": {
     "accuracy": 0.925
   },
-  "gate": {
-    "threshold": 0.55,
-    "in_distribution_kept_share": 1.0,
-    "ood_deferred_share": 0.067,
-    "kept_accuracy": 0.925
+  "ood": {
+    "probe_n": 30,
+    "confidence_gate": {
+      "threshold": 0.95,
+      "ood_caught": 0.167,
+      "real_deferred": 0.02
+    },
+    "reject_class": {
+      "ood_caught": 0.8,
+      "real_deferred": 0.0
+    }
   },
   "haiku": {
     "model": "claude-haiku-4-5",
