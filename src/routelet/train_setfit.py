@@ -70,8 +70,8 @@ def calibrate_temperature(
 ) -> float:
     """Fit a scalar temperature T on calib_examples.
 
-    Minimizes NLL of softmax(logits / T) against true labels using
-    scipy.optimize.minimize_scalar with Brent's method (bounded to [0.05, 20]).
+    Minimizes NLL of softmax(logits / T) against true labels with
+    scipy.optimize.minimize_scalar (bounded method) over T in [0.5, 20.0].
 
     Returns T > 0.
 
@@ -176,7 +176,7 @@ def threshold_analysis(
     n = len(test_examples)
 
     def _print_table(conf: np.ndarray, label: str) -> None:
-        print(f"\n--- confidence threshold analysis (124-row holdout, {label}) ---")
+        print(f"\n--- confidence threshold analysis ({n}-row holdout, {label}) ---")
         print(
             f"{'threshold':>10}  {'deferred':>10}  {'defer%':>8}  "
             f"{'kept_acc':>10}  {'defer_acc':>10}"
