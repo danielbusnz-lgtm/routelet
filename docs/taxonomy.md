@@ -45,3 +45,15 @@ If a command still fits more than one after the rules above, pick the first matc
 `agent` > `memory` > `integration` > `find_action` > `chat`
 
 `chat` is the default. If nothing else clearly applies, it is `chat`.
+
+## Reject class (`none`)
+
+A sixth label, `none`, sits outside the five routing intents. It is **not** a
+command type: it marks out-of-distribution or garbled input the router should
+not act on (gibberish, other languages, off-domain prose, ASR noise). It exists
+because the model is otherwise overconfident, shown only valid commands, it
+labels junk as one of the five at ~98% confidence, so a confidence gate can't
+catch it. Training on a `none` class of generated OOD (see `Scripts/gen_ood.py`)
+lets the model say "I don't know" directly. Aegis treats a `none` prediction as
+"defer to Claude", never as a routing target. `none` is never hand-labeled or
+emitted by the Claude teacher; it is learned only from generated OOD data.
