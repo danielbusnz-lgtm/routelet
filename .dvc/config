@@ -1,0 +1,5 @@
+[core]
+    remote = routelet-r2
+['remote "routelet-r2"']
+    url = s3://aegis-routelet-samples/dvc
+    endpointurl = https://3888bcbf92cc98efac814d0108cf9358.r2.cloudflarestorage.com

@@ -59,6 +59,18 @@ One JSON object per line:
 {"text": "play despacito on spotify", "intent": "integration"}
 ```
 
+## Data versioning
+
+The training pool under `data/` is versioned with [DVC](https://dvc.org); git
+tracks the `*.jsonl.dvc` pointers, the data lives in an R2 remote. After cloning:
+
+```
+dvc pull   # needs R2 credentials in .dvc/config.local (see dvc remote modify --local)
+```
+
+The frozen eval set, `evals/holdout.jsonl`, is committed to git directly so the
+benchmark is reproducible without DVC.
+
 ## License
 
 MIT
