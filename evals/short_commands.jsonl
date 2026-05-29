@@ -1,0 +1,14 @@
+{"text": "play this", "intent": "integration"}
+{"text": "skip it", "intent": "integration"}
+{"text": "pause", "intent": "integration"}
+{"text": "next track", "intent": "integration"}
+{"text": "resume playback", "intent": "integration"}
+{"text": "stop", "intent": "integration"}
+{"text": "mute", "intent": "integration"}
+{"text": "play sicko mode", "intent": "integration"}
+{"text": "do you see sicko mode", "intent": "find_action"}
+{"text": "open settings", "intent": "integration"}
+{"text": "turn up the volume", "intent": "integration"}
+{"text": "enable dark mode", "intent": "integration"}
+{"text": "whats the weather", "intent": "chat"}
+{"text": "whats the news", "intent": "chat"}

@@ -1,0 +1,17 @@
+{"text": "do you see sicko mode", "intent": "find_action"}
+{"text": "point at sicko mode", "intent": "find_action"}
+{"text": "talk to me about finding this ui element", "intent": "chat"}
+{"text": "tell me about the classify button", "intent": "chat"}
+{"text": "speak to me about the skip button on spotify", "intent": "chat"}
+{"text": "show me the skip song button", "intent": "find_action"}
+{"text": "sicko mode", "intent": "none"}
+{"text": "hello", "intent": "chat"}
+{"text": "hi", "intent": "chat"}
+{"text": "whats up", "intent": "chat"}
+{"text": "nice weather today huh", "intent": "chat"}
+{"text": "whats the green button", "intent": "chat"}
+{"text": "tell me about where i can find the song sicko mode", "intent": "chat"}
+{"text": "put ur", "intent": "none"}
+{"text": "daddy", "intent": "none"}
+{"text": "take me home", "intent": "none"}
+{"text": "im daniel brooks", "intent": "memory"}
