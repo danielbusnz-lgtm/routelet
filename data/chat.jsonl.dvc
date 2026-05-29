@@ -1,0 +1,5 @@
+outs:
+- md5: e2e66e5449bd901c87f00ca6ef8096eb
+  size: 7968
+  hash: md5
+  path: chat.jsonl
