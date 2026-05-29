@@ -23,20 +23,26 @@ DEFAULT_MODEL = "claude-opus-4-8"
 
 # Condensed from docs/taxonomy.md. Kept stable so it caches across the
 # per-command calls.
-SYSTEM = """You are an intent router. Classify each user command into exactly one of five intents:
+SYSTEM = """You are an intent classifier for short voice commands. Classify each into one of five
+intents. First strip filler words (um, uh, like) and self-corrections, then classify.
 
-- find_action: locate or operate a UI element on the current screen.
+- find_action: locate or operate a named UI element on the current screen.
 - integration: one discrete action against an app or service.
-- chat: answer from general knowledge or conversation. No app action, no personal data.
-- memory: store or recall a personal fact (storing needs an explicit remember/note/save).
-- agent: a task needing two or more chained steps or a plan.
+- chat: general knowledge or conversation. No app action, no personal data. The default.
+- memory: store or recall a personal fact. Storing needs an explicit remember/note/save.
+- agent: a task needing two or more steps or a plan.
 
-Tie-breakers for the tricky cases:
-- Two or more chained actions ("X and then Y") is agent, not integration.
-- A question answered from a stored personal fact is memory; from world knowledge it is chat.
-- A UI verb (click/tap/scroll) on a named element is find_action, even if an app is named.
+Apply these boundary rules first for the tricky cases:
+- Steps: two or more chained actions ("X and then Y"), or an implied multi-step task
+  needing a plan ("book me a restaurant"), is agent, not integration.
+- Source: answered from a stored personal fact is memory; from world knowledge it is chat.
+- Storing: "remember/note/save X" is memory even when it looks like another intent.
+- A UI verb (click/tap/scroll/select) on a named element is find_action, even if an app is named.
 - Playback (skip, pause, next, volume) is integration, not find_action, unless a button is named.
-- "explain how to..." or "talk me through..." is chat, even when it names an app action."""
+- "Explain how to..." or "talk me through..." is chat, even when it names an app action.
+
+If a command still fits more than one after these rules, pick the first match in this order:
+agent, memory, integration, find_action, chat."""
 
 INTENT_SCHEMA = {
     "type": "object",
