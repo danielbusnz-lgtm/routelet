@@ -1,0 +1,34 @@
+# Out-of-distribution / garbled probes for the confidence-gate plot. These are
+# deliberately unlike the five voice intents: gibberish, other languages,
+# off-domain prose, ASR noise. The gate (routelet -> Claude fallback) is meant
+# to fire on inputs like these. No labels: we only read the model's confidence.
+asdkfj qwoieu zxcmnv plok
+blorp the fnordle wug sprongle
+quelle heure est il maintenant
+ich moechte ein kaltes bier bitte
+the mitochondria is the powerhouse of the cell
+photosynthesis converts sunlight water and co2 into glucose
+lorem ipsum dolor sit amet consectetur adipiscing elit
+the treaty of westphalia was signed in sixteen forty eight
+uh the the um where is it like you know
+skrrt skrrt yeah yeah ok ok
+three point one four one five nine two six five
+glark mizzle frobnicate the wibble
+supercalifragilisticexpialidocious
+a b c d e f g h i j k l m n o p
+the stock market closed lower amid inflation fears
+ribosomes translate messenger rna into proteins
+hakuna matata what a wonderful phrase
+to be or not to be that is the question
+the quick brown fox jumps over the lazy dog
+e equals m c squared is mass energy equivalence
+my favorite color is the number seven on tuesdays
+wingardium leviosa not leviosaa
+the derivative of sine is cosine
+clouds drift slowly across an empty autumn sky
+zzzzz hmmmm errr uhhh ahh
+random words banana thunderstorm philosophy keyboard ocean
+the french revolution began in seventeen eighty nine
+i think therefore i am said descartes
+plinko bork snorf glimble dax
+the speed of light is about three hundred thousand kilometers per second

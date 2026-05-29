@@ -4,7 +4,13 @@
     "accuracy": 0.69
   },
   "setfit": {
-    "accuracy": 0.895
+    "accuracy": 0.925
+  },
+  "gate": {
+    "threshold": 0.55,
+    "in_distribution_kept_share": 1.0,
+    "ood_deferred_share": 0.067,
+    "kept_accuracy": 0.925
   },
   "haiku": {
     "model": "claude-haiku-4-5",
