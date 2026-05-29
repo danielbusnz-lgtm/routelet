@@ -156,18 +156,14 @@ def main() -> None:
     print(f"ST pooling mode: {pooling_mode}")
     print(f"ST modules: {[type(m).__name__ for m in body]}")
 
-    # Build the exportable wrapper.
     wrapper = EncoderWithPooling(body)
     wrapper.eval()
-
-    # Export fp32 ONNX.
     _export_embedder(wrapper, EMBEDDER_OUT)
 
-    # Quantize to int8.
     quantize_dynamic(EMBEDDER_OUT, EMBEDDER_INT8_OUT, weight_type=QuantType.QInt8)
     print(f"[quantize] saved {EMBEDDER_INT8_OUT}")
 
-    # Load fitted temperature T from the file written by train_setfit.py.
+    # Temperature is fitted and written by train_setfit.py; absent means no scaling.
     temp_path = Path(TEMPERATURE_FILE)
     if temp_path.exists():
         temperature = json.loads(temp_path.read_text())["temperature"]
@@ -176,7 +172,7 @@ def main() -> None:
         temperature = 1.0
         print(f"[temperature] {TEMPERATURE_FILE} not found, using T=1.0 (no scaling)")
 
-    # Dump LR head to JSON. classes_ order is what argmax maps to.
+    # classes_ order is the column order the Rust consumer's argmax maps back to labels.
     labels = head.classes_.tolist()
     head_data = {
         "coef": head.coef_.tolist(),
@@ -194,11 +190,9 @@ def main() -> None:
     shutil.copy(f"{SETFIT_DIR}/tokenizer.json", TOKENIZER_OUT)
     print(f"[tokenizer] copied -> {TOKENIZER_OUT}")
 
-    # Print I/O signature.
     fp32_sess = ort.InferenceSession(EMBEDDER_OUT, providers=["CPUExecutionProvider"])
     _print_session_info(fp32_sess)
 
-    # File sizes.
     fp32_bytes = Path(EMBEDDER_OUT).stat().st_size
     int8_bytes = Path(EMBEDDER_INT8_OUT).stat().st_size
     print("\nfile sizes:")
