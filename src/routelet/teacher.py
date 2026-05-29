@@ -39,7 +39,9 @@ Apply these boundary rules first for the tricky cases:
 - Storing: "remember/note/save X" is memory even when it looks like another intent.
 - A UI verb (click/tap/scroll/select) on a named element is find_action, even if an app is named.
 - Playback (skip, pause, next, volume) is integration, not find_action, unless a button is named.
-- "Explain how to..." or "talk me through..." is chat, even when it names an app action.
+- A question ABOUT a UI element or action is chat, not find_action: "what does X do", "what's the
+  X button", "tell me about X", "explain how to X", "talk me through X". find_action needs a command
+  to locate or operate something, not a request to explain it.
 
 If a command still fits more than one after these rules, pick the first match in this order:
 agent, memory, integration, find_action, chat."""

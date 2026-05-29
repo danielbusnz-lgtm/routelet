@@ -38,6 +38,12 @@ Use these when a command looks like it could fit two intents.
    next, volume) are service capabilities, so `integration`, unless a button is named ("click the
    skip button" is `find_action`).
 
+5. **A question about a UI element is `chat`, not `find_action`.** `find_action` needs a command
+   to locate or operate something ("where is X" to go there, "click X"). Asking *about* a visible
+   element, with no such command, is `chat`: "what does this button do", "what's the green button",
+   "tell me about the search bar", "explain how to find the menu". A UI word in the sentence does
+   not make it `find_action`; the user wants an explanation, not a cursor move.
+
 ## Tie-breaker
 
 If a command still fits more than one after the rules above, pick the first match in this order:
