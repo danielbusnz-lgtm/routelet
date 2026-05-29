@@ -268,20 +268,24 @@ def main() -> None:
     assert cw == "balanced", f"class_weight not applied; got {cw!r}"
     print(f"head class_weight: {cw}")
 
-    # sampling_strategy="unique": draws every sentence-pair combination exactly
-    # once (no duplication). Valid in setfit 1.1.3 (confirmed in source).
-    # num_epochs=2 doubles the embedding training time vs. the previous 1-epoch
-    # run, giving the contrastive head more signal on the larger 1115-row pool.
+    # oversampling draws num_iterations * n_classes * 2 pairs per epoch instead
+    # of the full O(n^2) pair set. "unique" generated ~1.2M pairs on the grown
+    # ~1566-row pool (~60 min runs), and most were trivially-easy near-duplicate
+    # pairs from the disfluency augmentation, so the embedding loss collapsed
+    # early without real signal. 40 iterations gives 400 pairs, enough to nudge
+    # the bge-small embedding for the domain; the LR head does the rest.
     args = TrainingArguments(
         batch_size=16,
-        num_epochs=2,
-        sampling_strategy="unique",
+        num_epochs=1,
+        num_iterations=40,
+        sampling_strategy="oversampling",
     )
     print("\nTrainingArguments:")
     print(f"  batch_size:        {args.batch_size}")
     print(f"  num_epochs:        {args.num_epochs}")
+    print(f"  num_iterations:    {args.num_iterations}")
     print(f"  sampling_strategy: {args.sampling_strategy}")
-    assert args.sampling_strategy == "unique", (
+    assert args.sampling_strategy == "oversampling", (
         f"sampling_strategy not applied; got {args.sampling_strategy!r}"
     )
 
