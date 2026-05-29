@@ -1,15 +1,13 @@
 """The Intent label schema and dataset prep for intent routing.
 
 Reads labeled JSONL, one ``{"text", "intent"}`` object per line, into the
-deterministic train/test splits that train.py and evaluate.py consume.
+validated Example lists that train.py and evaluate.py consume.
 """
 
 import json
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
-
-from sklearn.model_selection import train_test_split
 
 
 class Intent(StrEnum):
@@ -64,26 +62,3 @@ def load_dir(directory: str | Path) -> list[Example]:
     for path in sorted(Path(directory).glob("*.jsonl")):
         examples.extend(load(path))
     return examples
-
-
-def split(
-    examples: list[Example],
-    test_size: float = 0.25,
-    seed: int = 0,
-) -> tuple[list[Example], list[Example]]:
-    """Deterministic, stratified train/test split.
-
-    Stratified so each intent keeps its proportion in both halves. With classes
-    this small an unstratified split can leave an intent with zero test rows and
-    silently blind the eval to it. ``seed`` fixes the partition so accuracy is
-    comparable across runs. Raises ValueError if any intent has fewer than 2
-    examples, since it can't land in both halves.
-
-    This splits the hand-labeled pool. The real frozen eval set will live in
-    evals/, sourced apart from the training data.
-    """
-    labels = [e.intent for e in examples]
-    train, test = train_test_split(
-        examples, test_size=test_size, random_state=seed, stratify=labels
-    )
-    return train, test

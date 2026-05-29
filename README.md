@@ -15,15 +15,42 @@ The frozen intent set and labeling rules live in [docs/taxonomy.md](docs/taxonom
 
 ## Layout
 
+The pipeline runs **data → train → export → evaluate**. Two files are the spine
+everything else imports: `data.py` (the `Intent` label set and JSONL loaders)
+and `preprocess.py` (the redaction/normalization applied identically at training
+and inference, mirrored in the Rust consumer).
+
 ```
 src/routelet/
-  data.py       label schema and train/test prep
-  train.py      fine-tune a small model on the labels
-  serve.py      FastAPI endpoint: text in, intent out
-  evaluate.py   routelet vs the LLM baseline (accuracy, latency, cost)
-examples/
-  intents.sample.jsonl   example label format
+  data.py            Intent enum (the 5 labels) + JSONL load/split. Source of truth.
+  preprocess.py      mask secrets/emails/digits. Same pass at train and inference.
+
+  augment.py         clean rows -> voice-like disfluent variants (data/augmented.jsonl)
+  checkdata.py       dataset health: per-class counts, train/eval leakage
+
+  train.py           TF-IDF + logistic-regression baseline (the floor to beat)
+  train_setfit.py    the shipped model: SetFit fine-tune of bge-small + LR head,
+                     then temperature calibration -> models/setfit
+  setfit_baseline.py benchmark harness that trains+discards SetFit (not the ship path)
+  export_onnx.py     models/setfit -> embedder.onnx + tokenizer.json + head.json (int8)
+
+  evaluate.py        the Claude LLM baseline (the accuracy ceiling), one call per row
+  teacher.py         shared taxonomy prompt + schema + classify(), used by eval + ingest
+  serve.py           optional FastAPI endpoint (stub; Aegis runs the ONNX in-process)
+
+Scripts/             runnable tools (not library code)
+  pull_samples.py    pull redacted samples from the proxy's R2 -> one JSONL
+  ingest_samples.py  label them (free Claude label or teacher), dedup -> data/collected.jsonl
+  refresh_haiku_baseline.py   re-run the paid Haiku eval -> report/baselines.json
+
+report/              report.py scores the models on the holdout -> figures + metrics.json
+evals/               frozen eval data (holdout.jsonl). Never trained on.
+experiments/         throwaway prototypes, not part of the library (see its README)
 ```
+
+The data-collection loop closes back on itself: Aegis logs redacted samples ->
+proxy -> R2, then `Scripts/pull_samples.py` + `ingest_samples.py` turn those into
+new labeled training data.
 
 ## Data format
 
