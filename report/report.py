@@ -51,7 +51,7 @@ C_OOD = "#D55E00"
 
 # Routelet's on-device confidence gate: below this, Aegis defers to the Claude
 # fallback. Mirrors ROUTELET_CONFIDENCE_THRESHOLD in the aegis crate's tuning.rs.
-GATE = 0.95
+GATE = 0.55
 
 
 def score_tfidf(texts: list[str], gold: list[str]) -> float:
@@ -118,6 +118,7 @@ def load_ood_probes() -> list[str]:
 def load_haiku(eval_n: int) -> dict | None:
     """Read the cached Claude baseline. Returns the record with a `stale` flag
     set when it was measured on a different holdout size than the current one."""
+
     if not BASELINES.exists():
         return None
     data = json.loads(BASELINES.read_text())
@@ -174,46 +175,83 @@ def plot_model_comparison(metrics: dict) -> Path:
     return out
 
 
-def plot_ood_detection(
-    gate_caught: float, gate_deferred: float, reject_caught: float, reject_deferred: float
-) -> Path:
-    """Figure 2: how each mechanism handles out-of-distribution / garbled input.
-    "caught" = correctly sent to Claude; "wrongly deferred" = a real command sent
-    to Claude by mistake. The reject class (a learned "none" label) catches far
-    more OOD than the confidence gate, at near-zero false-reject cost."""
-    methods = ["confidence gate\n(0.95 cutoff)", "reject class\n(learned 'none')"]
-    caught = [gate_caught * 100, reject_caught * 100]
-    deferred = [gate_deferred * 100, reject_deferred * 100]
-
-    x = np.arange(len(methods))
-    w = 0.36
+def plot_confidence_histogram(indist: np.ndarray, ood: np.ndarray, gate: float) -> Path:
+    """Figure 2: routelet confidence on in-distribution holdout vs OOD/garbled
+    probes, with the gate line. The cascade works if in-distribution input sits
+    above the gate (kept on-device) while OOD input falls below it (deferred to
+    Claude). Overlapping (not stacked) histograms, densities so the two groups
+    are comparable despite different counts."""
+    bins = np.linspace(0.0, 1.0, 21)
     fig, ax = plt.subplots(figsize=(7, 4.5))
-    b1 = ax.bar(x - w / 2, caught, w, color=C_OOD,
-                label="OOD / garbled caught (higher better)", zorder=3)
-    b2 = ax.bar(x + w / 2, deferred, w, color=C_INDIST,
-                label="real commands wrongly deferred (lower better)", zorder=3)
-    for bars in (b1, b2):
-        for bar in bars:
-            ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1.5,
-                    f"{bar.get_height():.0f}%", ha="center", va="bottom",
-                    fontsize=10, fontweight="bold")
+    ax.hist(indist, bins=bins, color=C_INDIST, alpha=0.6, density=True,
+            label=f"in-distribution holdout (n={len(indist)})", zorder=3)
+    ax.hist(ood, bins=bins, color=C_OOD, alpha=0.7, density=True,
+            label=f"OOD / garbled probe (n={len(ood)})", zorder=3)
 
-    ax.set_xticks(x)
-    ax.set_xticklabels(methods, fontsize=10)
-    ax.set_ylabel("% of inputs")
-    ax.set_ylim(0, 100)
+    ax.axvline(gate, color="black", linestyle="--", linewidth=1.2, zorder=4)
+    ymax = ax.get_ylim()[1]
+    ax.text(gate - 0.012, ymax * 0.96, f"{gate:.2f} gate", ha="right", va="top", fontsize=9)
+    ax.text(gate - 0.012, ymax * 0.55, "← defer to Claude", ha="right", fontsize=8, color="#555")
+    ax.text(gate + 0.012, ymax * 0.55, "kept on-device →", ha="left", fontsize=8, color="#555")
+
+    ood_deferred = int((ood < gate).sum())
+    indist_kept = int((indist >= gate).sum())
     ax.set_title(
-        "Reject class catches far more OOD at near-zero false-reject cost",
+        f"OOD defers {ood_deferred}/{len(ood)}, in-distribution keeps "
+        f"{indist_kept}/{len(indist)} at the {gate:.2f} gate",
         fontsize=11, fontweight="bold",
     )
-    ax.legend(frameon=False, loc="upper center", fontsize=8)
+    ax.set_xlabel("routelet confidence (temperature-scaled max softmax)")
+    ax.set_ylabel("density")
+    ax.set_xlim(0, 1)
+    ax.legend(frameon=False, loc="upper left")
     ax.yaxis.grid(True, linestyle="--", alpha=0.4, zorder=0)
     ax.set_axisbelow(True)
     for spine in ("top", "right"):
         ax.spines[spine].set_visible(False)
     fig.tight_layout()
 
-    out = OUT_DIR / "ood_detection.png"
+    out = OUT_DIR / "confidence_histogram.png"
+    fig.savefig(out, dpi=150)
+    plt.close(fig)
+    return out
+
+
+def plot_deferral_tradeoff(indist: np.ndarray, ood: np.ndarray, gate: float) -> Path:
+    """Figure 3: as the confidence cutoff rises, what fraction of in-distribution
+    commands get wrongly deferred to Claude vs what fraction of OOD/garbled input
+    gets caught. The two lines never separate cleanly, which is why no cutoff
+    makes the gate work: catching OOD means deferring real commands too."""
+    thresholds = np.linspace(0.5, 1.0, 101)
+    id_deferred = np.array([(indist < t).mean() for t in thresholds]) * 100
+    ood_caught = np.array([(ood < t).mean() for t in thresholds]) * 100
+
+    fig, ax = plt.subplots(figsize=(7.5, 4.5))
+    ax.plot(thresholds, ood_caught, color=C_OOD, linewidth=2.4,
+            label="OOD / garbled caught (good)", zorder=3)
+    ax.plot(thresholds, id_deferred, color=C_INDIST, linewidth=2.4,
+            label="real commands wrongly deferred (bad)", zorder=3)
+
+    ax.axvline(gate, color="#777", linestyle="--", linewidth=1.2, zorder=2)
+    ax.text(gate, 102, f"current cutoff {gate:.2f}", ha="center", va="bottom",
+            fontsize=8, color="#555")
+
+    ax.set_xlabel("confidence cutoff (defer to Claude below it)")
+    ax.set_ylabel("% of inputs deferred")
+    ax.set_title(
+        "No cutoff works: catching garbage means deferring real commands too",
+        fontsize=11, fontweight="bold",
+    )
+    ax.set_xlim(0.5, 1.0)
+    ax.set_ylim(0, 105)
+    ax.legend(loc="upper left", frameon=False)
+    ax.grid(True, linestyle="--", alpha=0.4, zorder=0)
+    ax.set_axisbelow(True)
+    for spine in ("top", "right"):
+        ax.spines[spine].set_visible(False)
+    fig.tight_layout()
+
+    out = OUT_DIR / "deferral_tradeoff.png"
     fig.savefig(out, dpi=150)
     plt.close(fig)
     return out
@@ -235,29 +273,29 @@ def main() -> None:
     setfit_acc = float(correct.mean())
     print(f"  SetFit  {setfit_acc:.3f}")
 
-    # OOD detection: compare the old confidence gate to the reject class on the
-    # same hand-written probe set (caught) and the holdout (wrongly deferred).
+    # OOD/garbled probe: confidence on inputs the gate is meant to defer.
     ood_texts = load_ood_probes()
-    ood_conf, ood_preds = setfit_predict(bundle, ood_texts)
-    gate_caught = float((ood_conf < GATE).mean())
-    reject_caught = float(np.mean([p == "none" for p in ood_preds]))
-    gate_deferred = float((conf < GATE).mean())
-    reject_deferred = float(np.mean([p == "none" for p in preds]))
-    ood_stats = {
-        "probe_n": len(ood_texts),
-        "confidence_gate": {"threshold": GATE, "ood_caught": round(gate_caught, 3),
-                            "real_deferred": round(gate_deferred, 3)},
-        "reject_class": {"ood_caught": round(reject_caught, 3),
-                         "real_deferred": round(reject_deferred, 3)},
+    ood_conf, _ = setfit_predict(bundle, ood_texts)
+
+    # Confidence gate operating point: what the cascade does at GATE.
+    indist_kept = conf >= GATE
+    ood_deferred = ood_conf < GATE
+    gate_stats = {
+        "threshold": GATE,
+        "in_distribution_kept_share": round(float(indist_kept.mean()), 3),
+        "ood_deferred_share": round(float(ood_deferred.mean()), 3),
+        "kept_accuracy": (
+            round(float(correct[indist_kept].mean()), 3) if indist_kept.any() else None
+        ),
     }
-    print(f"  OOD caught: gate {gate_caught:.0%}, reject-class {reject_caught:.0%}; "
-          f"real wrongly deferred: gate {gate_deferred:.0%}, reject {reject_deferred:.0%}")
+    print(f"  gate {GATE}: in-dist keeps {gate_stats['in_distribution_kept_share']:.0%}, "
+          f"OOD defers {gate_stats['ood_deferred_share']:.0%}")
 
     metrics: dict = {
         "eval_n": eval_n,
         "tfidf": {"accuracy": tfidf_acc},
         "setfit": {"accuracy": setfit_acc},
-        "ood": ood_stats,
+        "gate": gate_stats,
     }
     haiku = load_haiku(eval_n)
     if haiku:
@@ -270,7 +308,8 @@ def main() -> None:
 
     (OUT_DIR / "metrics.json").write_text(json.dumps(metrics, indent=2) + "\n")
     print(f"wrote {plot_model_comparison(metrics)}")
-    print(f"wrote {plot_ood_detection(gate_caught, gate_deferred, reject_caught, reject_deferred)}")
+    print(f"wrote {plot_confidence_histogram(conf, ood_conf, GATE)}")
+    print(f"wrote {plot_deferral_tradeoff(conf, ood_conf, GATE)}")
     print(f"wrote {OUT_DIR / 'metrics.json'}")
 
 
