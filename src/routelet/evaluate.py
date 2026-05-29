@@ -19,32 +19,12 @@ from sklearn.metrics import accuracy_score, classification_report
 
 from routelet.data import Intent, load
 
+# The prompt and schema are the teacher's, shared with the ingest labeler so the
+# eval measures the same classifier that labels the training data.
+from routelet.teacher import INTENT_SCHEMA, SYSTEM
+
 MODEL = "claude-haiku-4-5"
 EVAL_FILE = "evals/holdout.jsonl"
-
-# Condensed from docs/taxonomy.md. Kept stable so it caches across the per-command
-# calls (though a prompt this short may sit under the model's min cacheable prefix).
-SYSTEM = """You are an intent router. Classify each user command into exactly one of five intents:
-
-- find_action: locate or operate a UI element on the current screen.
-- integration: one discrete action against an app or service.
-- chat: answer from general knowledge or conversation. No app action, no personal data.
-- memory: store or recall a personal fact (storing needs an explicit remember/note/save).
-- agent: a task needing two or more chained steps or a plan.
-
-Tie-breakers for the tricky cases:
-- Two or more chained actions ("X and then Y") is agent, not integration.
-- A question answered from a stored personal fact is memory; from world knowledge it is chat.
-- A UI verb (click/tap/scroll) on a named element is find_action, even if an app is named.
-- Playback (skip, pause, next, volume) is integration, not find_action, unless a button is named.
-- "explain how to..." or "talk me through..." is chat, even when it names an app action."""
-
-INTENT_SCHEMA = {
-    "type": "object",
-    "properties": {"intent": {"type": "string", "enum": [i.value for i in Intent]}},
-    "required": ["intent"],
-    "additionalProperties": False,
-}
 
 
 def main() -> None:
