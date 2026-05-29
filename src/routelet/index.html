@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>routelet playground</title>
+  <style>
+    :root { --green: #009e73; --gray: #999; --bg: #fafafa; --ink: #1e2327; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      max-width: 640px; margin: 6vh auto; padding: 0 20px;
+      background: var(--bg); color: var(--ink);
+    }
+    h1 { font-size: 1.4rem; margin: 0 0 .25rem; }
+    p.sub { color: var(--gray); margin: 0 0 1.5rem; font-size: .9rem; }
+    form { display: flex; gap: 8px; }
+    input {
+      flex: 1; padding: 12px 14px; font-size: 1rem; border: 1px solid #ccc;
+      border-radius: 8px; outline: none;
+    }
+    input:focus { border-color: var(--green); }
+    button {
+      padding: 12px 18px; font-size: 1rem; border: 0; border-radius: 8px;
+      background: var(--green); color: white; cursor: pointer;
+    }
+    #result { margin-top: 1.75rem; display: none; }
+    .intent { font-size: 1.6rem; font-weight: 700; }
+    .intent .conf { color: var(--gray); font-weight: 400; font-size: 1.1rem; }
+    .bars { margin-top: 1rem; }
+    .row { display: grid; grid-template-columns: 110px 1fr 52px; align-items: center;
+           gap: 10px; margin: 6px 0; font-size: .9rem; }
+    .row .label { text-align: right; color: #444; font-variant-numeric: tabular-nums; }
+    .track { background: #eee; border-radius: 5px; height: 14px; overflow: hidden; }
+    .fill { height: 100%; background: var(--green); }
+    .row.none .fill { background: #d55e00; }
+    .row .pct { text-align: right; color: var(--gray); font-variant-numeric: tabular-nums; }
+    .examples { margin-top: 1.5rem; font-size: .85rem; color: var(--gray); }
+    .examples code { cursor: pointer; background: #eee; padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>routelet</h1>
+  <p class="sub">Type a command. See how the on-device intent router classifies it.</p>
+
+  <form id="form">
+    <input id="text" placeholder="e.g. play despacito on spotify" autocomplete="off" autofocus />
+    <button type="submit">Classify</button>
+  </form>
+
+  <div id="result">
+    <div class="intent"><span id="intent"></span> <span class="conf" id="conf"></span></div>
+    <div class="bars" id="bars"></div>
+  </div>
+
+  <p class="examples">
+    try:
+    <code>where is the search bar</code>
+    <code>remember my wifi password is hunter2</code>
+    <code>asdkfj qwoieu zxcmnv</code>
+  </p>
+
+  <script>
+    const form = document.getElementById("form");
+    const input = document.getElementById("text");
+    const result = document.getElementById("result");
+
+    async function classify(text) {
+      const res = await fetch("/route", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      const data = await res.json();
+      document.getElementById("intent").textContent = data.intent;
+      document.getElementById("conf").textContent = (data.confidence * 100).toFixed(1) + "%";
+      const bars = document.getElementById("bars");
+      bars.innerHTML = "";
+      for (const { label, prob } of data.distribution) {
+        const row = document.createElement("div");
+        row.className = "row" + (label === "none" ? " none" : "");
+        row.innerHTML =
+          `<span class="label">${label}</span>` +
+          `<span class="track"><span class="fill" style="width:${(prob * 100).toFixed(1)}%"></span></span>` +
+          `<span class="pct">${(prob * 100).toFixed(0)}%</span>`;
+        bars.appendChild(row);
+      }
+      result.style.display = "block";
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (input.value.trim()) classify(input.value.trim());
+    });
+    document.querySelectorAll(".examples code").forEach((el) => {
+      el.addEventListener("click", () => { input.value = el.textContent; classify(el.textContent); });
+    });
+  </script>
+</body>
+</html>
