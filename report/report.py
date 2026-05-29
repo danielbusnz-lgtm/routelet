@@ -37,12 +37,21 @@ HOLDOUT = PROJECT_ROOT / "evals" / "holdout.jsonl"
 TFIDF_MODEL = PROJECT_ROOT / "models" / "baseline.joblib"
 SETFIT_DIR = PROJECT_ROOT / "models" / "setfit"
 BASELINES = PROJECT_ROOT / "report" / "baselines.json"
+OOD_PROBE = PROJECT_ROOT / "report" / "ood_probe.txt"
 OUT_DIR = PROJECT_ROOT / "report"
 
 # Okabe-Ito (colorblind-safe). Gray baseline, green hero (routelet), amber oracle.
 C_TFIDF = "#999999"
 C_ROUTELET = "#009E73"
 C_HAIKU = "#E69F00"
+# In-distribution vs OOD: blue and vermillion, distinguishable for colorblind
+# readers (and labeled, so not relying on hue alone).
+C_INDIST = "#0072B2"
+C_OOD = "#D55E00"
+
+# Routelet's on-device confidence gate: below this, Aegis defers to the Claude
+# fallback. Mirrors ROUTELET_CONFIDENCE_THRESHOLD in the aegis crate's tuning.rs.
+GATE = 0.55
 
 
 def score_tfidf(texts: list[str], gold: list[str]) -> float:
@@ -53,15 +62,57 @@ def score_tfidf(texts: list[str], gold: list[str]) -> float:
     return float(accuracy_score(gold, preds))
 
 
-def score_setfit(texts: list[str], gold: list[str]) -> float:
-    """The shipped SetFit model. Trained on preprocess()'d text, so score the
-    same way. This is the fine-tuned bge-small body + LR head in torch; int8
-    ONNX (what Rust actually runs) is verified equivalent at export time."""
+def _load_temperature() -> float:
+    """The calibrated temperature baked into the model dir, or 1.0 if absent.
+    Must match what Aegis applies so the gate confidence here equals production."""
+    path = SETFIT_DIR / "temperature.json"
+    if path.exists():
+        return float(json.loads(path.read_text())["temperature"])
+    return 1.0
+
+
+def load_setfit() -> dict:
+    """Load the shipped SetFit model once into a reusable bundle (body + head
+    weights + calibrated temperature), so the holdout and the OOD probe can both
+    be scored without reloading the model."""
     from setfit import SetFitModel
 
     model = SetFitModel.from_pretrained(str(SETFIT_DIR))
-    preds = list(model.predict([preprocess(t) for t in texts]))
-    return float(accuracy_score(gold, preds))
+    head = model.model_head
+    return {
+        "body": model.model_body,
+        "coef": head.coef_,
+        "intercept": head.intercept_,
+        "labels": head.classes_.tolist(),
+        "temperature": _load_temperature(),
+    }
+
+
+def setfit_predict(bundle: dict, texts: list[str]) -> tuple[np.ndarray, list[str]]:
+    """Run the model the way Aegis does: embed preprocess()'d text, apply the LR
+    head, temperature-scale, softmax, argmax. Returns (max-softmax confidence per
+    row, predicted labels). The int8 ONNX Aegis ships is verified equivalent at
+    export time."""
+    emb = bundle["body"].encode(
+        [preprocess(t) for t in texts], convert_to_numpy=True, show_progress_bar=False
+    )
+    logits = (emb @ bundle["coef"].T + bundle["intercept"]) / bundle["temperature"]
+    logits -= logits.max(axis=1, keepdims=True)
+    probs = np.exp(logits)
+    probs /= probs.sum(axis=1, keepdims=True)
+    idx = probs.argmax(axis=1)
+    conf = probs[np.arange(len(idx)), idx]
+    preds = [bundle["labels"][i] for i in idx]
+    return conf, preds
+
+
+def load_ood_probes() -> list[str]:
+    """Read the OOD/garbled probe lines (skipping blanks and # comments)."""
+    return [
+        ln.strip()
+        for ln in OOD_PROBE.read_text().splitlines()
+        if ln.strip() and not ln.lstrip().startswith("#")
+    ]
 
 
 def load_haiku(eval_n: int) -> dict | None:
@@ -123,6 +174,88 @@ def plot_model_comparison(metrics: dict) -> Path:
     return out
 
 
+def plot_confidence_histogram(indist: np.ndarray, ood: np.ndarray, gate: float) -> Path:
+    """Figure 2: routelet confidence on in-distribution holdout vs OOD/garbled
+    probes, with the gate line. The cascade works if in-distribution input sits
+    above the gate (kept on-device) while OOD input falls below it (deferred to
+    Claude). Overlapping (not stacked) histograms, densities so the two groups
+    are comparable despite different counts."""
+    bins = np.linspace(0.0, 1.0, 21)
+    fig, ax = plt.subplots(figsize=(7, 4.5))
+    ax.hist(indist, bins=bins, color=C_INDIST, alpha=0.6, density=True,
+            label=f"in-distribution holdout (n={len(indist)})", zorder=3)
+    ax.hist(ood, bins=bins, color=C_OOD, alpha=0.7, density=True,
+            label=f"OOD / garbled probe (n={len(ood)})", zorder=3)
+
+    ax.axvline(gate, color="black", linestyle="--", linewidth=1.2, zorder=4)
+    ymax = ax.get_ylim()[1]
+    ax.text(gate - 0.012, ymax * 0.96, f"{gate:.2f} gate", ha="right", va="top", fontsize=9)
+    ax.text(gate - 0.012, ymax * 0.55, "← defer to Claude", ha="right", fontsize=8, color="#555")
+    ax.text(gate + 0.012, ymax * 0.55, "kept on-device →", ha="left", fontsize=8, color="#555")
+
+    ood_deferred = int((ood < gate).sum())
+    indist_kept = int((indist >= gate).sum())
+    ax.set_title(
+        f"OOD defers {ood_deferred}/{len(ood)}, in-distribution keeps "
+        f"{indist_kept}/{len(indist)} at the {gate:.2f} gate",
+        fontsize=11, fontweight="bold",
+    )
+    ax.set_xlabel("routelet confidence (temperature-scaled max softmax)")
+    ax.set_ylabel("density")
+    ax.set_xlim(0, 1)
+    ax.legend(frameon=False, loc="upper left")
+    ax.yaxis.grid(True, linestyle="--", alpha=0.4, zorder=0)
+    ax.set_axisbelow(True)
+    for spine in ("top", "right"):
+        ax.spines[spine].set_visible(False)
+    fig.tight_layout()
+
+    out = OUT_DIR / "confidence_histogram.png"
+    fig.savefig(out, dpi=150)
+    plt.close(fig)
+    return out
+
+
+def plot_deferral_tradeoff(indist: np.ndarray, ood: np.ndarray, gate: float) -> Path:
+    """Figure 3: as the confidence cutoff rises, what fraction of in-distribution
+    commands get wrongly deferred to Claude vs what fraction of OOD/garbled input
+    gets caught. The two lines never separate cleanly, which is why no cutoff
+    makes the gate work: catching OOD means deferring real commands too."""
+    thresholds = np.linspace(0.5, 1.0, 101)
+    id_deferred = np.array([(indist < t).mean() for t in thresholds]) * 100
+    ood_caught = np.array([(ood < t).mean() for t in thresholds]) * 100
+
+    fig, ax = plt.subplots(figsize=(7.5, 4.5))
+    ax.plot(thresholds, ood_caught, color=C_OOD, linewidth=2.4,
+            label="OOD / garbled caught (good)", zorder=3)
+    ax.plot(thresholds, id_deferred, color=C_INDIST, linewidth=2.4,
+            label="real commands wrongly deferred (bad)", zorder=3)
+
+    ax.axvline(gate, color="#777", linestyle="--", linewidth=1.2, zorder=2)
+    ax.text(gate, 102, f"current cutoff {gate:.2f}", ha="center", va="bottom",
+            fontsize=8, color="#555")
+
+    ax.set_xlabel("confidence cutoff (defer to Claude below it)")
+    ax.set_ylabel("% of inputs deferred")
+    ax.set_title(
+        "The 0.55 cutoff is too low: ~0.95 catches far more garbage at little cost",
+        fontsize=11, fontweight="bold",
+    )
+    ax.set_xlim(0.5, 1.0)
+    ax.set_ylim(0, 105)
+    ax.legend(loc="upper left", frameon=False)
+    ax.grid(True, linestyle="--", alpha=0.4, zorder=0)
+    ax.set_axisbelow(True)
+    for spine in ("top", "right"):
+        ax.spines[spine].set_visible(False)
+    fig.tight_layout()
+
+    out = OUT_DIR / "deferral_tradeoff.png"
+    fig.savefig(out, dpi=150)
+    plt.close(fig)
+    return out
+
+
 def main() -> None:
     examples = load(HOLDOUT)
     texts = [e.text for e in examples]
@@ -132,13 +265,36 @@ def main() -> None:
     print(f"scoring on {eval_n}-row holdout")
     tfidf_acc = score_tfidf(texts, gold)
     print(f"  TF-IDF  {tfidf_acc:.3f}")
-    setfit_acc = score_setfit(texts, gold)
+
+    bundle = load_setfit()
+    conf, preds = setfit_predict(bundle, texts)
+    correct = np.array([p == g for p, g in zip(preds, gold)])
+    setfit_acc = float(correct.mean())
     print(f"  SetFit  {setfit_acc:.3f}")
+
+    # OOD/garbled probe: confidence on inputs the gate is meant to defer.
+    ood_texts = load_ood_probes()
+    ood_conf, _ = setfit_predict(bundle, ood_texts)
+
+    # Confidence gate operating point: what the cascade does at GATE.
+    indist_kept = conf >= GATE
+    ood_deferred = ood_conf < GATE
+    gate_stats = {
+        "threshold": GATE,
+        "in_distribution_kept_share": round(float(indist_kept.mean()), 3),
+        "ood_deferred_share": round(float(ood_deferred.mean()), 3),
+        "kept_accuracy": (
+            round(float(correct[indist_kept].mean()), 3) if indist_kept.any() else None
+        ),
+    }
+    print(f"  gate {GATE}: in-dist keeps {gate_stats['in_distribution_kept_share']:.0%}, "
+          f"OOD defers {gate_stats['ood_deferred_share']:.0%}")
 
     metrics: dict = {
         "eval_n": eval_n,
         "tfidf": {"accuracy": tfidf_acc},
         "setfit": {"accuracy": setfit_acc},
+        "gate": gate_stats,
     }
     haiku = load_haiku(eval_n)
     if haiku:
@@ -150,8 +306,9 @@ def main() -> None:
             print(f"  Haiku   {haiku['accuracy']:.3f}  (cached)")
 
     (OUT_DIR / "metrics.json").write_text(json.dumps(metrics, indent=2) + "\n")
-    fig = plot_model_comparison(metrics)
-    print(f"wrote {fig}")
+    print(f"wrote {plot_model_comparison(metrics)}")
+    print(f"wrote {plot_confidence_histogram(conf, ood_conf, GATE)}")
+    print(f"wrote {plot_deferral_tradeoff(conf, ood_conf, GATE)}")
     print(f"wrote {OUT_DIR / 'metrics.json'}")
 
 
