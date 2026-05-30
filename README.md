@@ -44,7 +44,6 @@ Scripts/             runnable tools (not library code)
 
 report/              report.py scores the models on the holdout -> figures + metrics.json
 evals/               frozen eval data (holdout.jsonl). Never trained on.
-experiments/         throwaway prototypes, not part of the library (see its README)
 ```
 
 The data-collection loop closes back on itself: Aegis logs redacted samples ->
