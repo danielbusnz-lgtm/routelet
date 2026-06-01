@@ -15,3 +15,7 @@
 {"text": "daddy", "intent": "none"}
 {"text": "take me home", "intent": "none"}
 {"text": "im daniel brooks", "intent": "memory"}
+{"text": "hey can you hear me", "intent": "chat"}
+{"text": "can you hear me now", "intent": "chat"}
+{"text": "you still there", "intent": "chat"}
+{"text": "is this thing working", "intent": "chat"}
