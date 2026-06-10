@@ -23,28 +23,32 @@ DEFAULT_MODEL = "claude-opus-4-8"
 
 # Condensed from docs/taxonomy.md. Kept stable so it caches across the
 # per-command calls.
-SYSTEM = """You are an intent classifier for short voice commands. Classify each into one of five
+SYSTEM = """You are an intent classifier for short voice commands. Classify each into one of four
 intents. First strip filler words (um, uh, like) and self-corrections, then classify.
 
 - find_action: locate or operate a named UI element on the current screen.
-- integration: one discrete action against an app or service.
+- integration: one or more discrete actions against an app or service.
 - chat: general knowledge or conversation. No app action, no personal data. The default.
 - memory: store or recall a personal fact. Storing needs an explicit remember/note/save.
-- agent: a task needing two or more steps or a plan.
 
 Apply these boundary rules first for the tricky cases:
-- Steps: two or more chained actions ("X and then Y"), or an implied multi-step task
-  needing a plan ("book me a restaurant"), is agent, not integration.
 - Source: answered from a stored personal fact is memory; from world knowledge it is chat.
 - Storing: "remember/note/save X" is memory even when it looks like another intent.
+- Another person's contact info (their number, their email) is a contacts lookup, so
+  integration, not memory: "what's my sister's number" is integration. memory is for facts
+  about the user themselves ("what's my wifi password").
 - A UI verb (click/tap/scroll/select) on a named element is find_action, even if an app is named.
 - Playback (skip, pause, next, volume) is integration, not find_action, unless a button is named.
 - A question ABOUT a UI element or action is chat, not find_action: "what does X do", "what's the
   X button", "tell me about X", "explain how to X", "talk me through X". find_action needs a command
   to locate or operate something, not a request to explain it.
+- A question about YOUR capabilities is chat, whatever domain it names: "can you see my screen",
+  "you can play songs right?", "you can remember my name right?". A hedged imperative with a
+  concrete object is still a command ("can you play despacito" is integration); a question about
+  ability with nothing specific to act on is chat.
 
 If a command still fits more than one after these rules, pick the first match in this order:
-agent, memory, integration, find_action, chat."""
+memory, integration, find_action, chat."""
 
 # Real intents only: the teacher labels actual commands, never the reject class
 # (NONE), which is learned from generated OOD data, not from the LLM.

@@ -6,5 +6,3 @@
 {"text": "explain how transformers work", "intent": "chat"}
 {"text": "remember my name is Daniel", "intent": "memory"}
 {"text": "what's my wifi password", "intent": "memory"}
-{"text": "open youtube, search for lofi, play the top result", "intent": "agent"}
-{"text": "find the cheapest flight to tokyo and book it", "intent": "agent"}

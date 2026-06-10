@@ -30,7 +30,6 @@ SAMPLES = [
     ("find the settings icon", Intent.FIND_ACTION),
     ("what time is it", Intent.CHAT),
     ("remember that my meeting is at 3pm", Intent.MEMORY),
-    ("search amazon and buy the cheapest hdmi cable", Intent.AGENT),
 ]
 
 # A partner text for chaining tests.
@@ -137,7 +136,7 @@ class TestConservativeChaining(unittest.TestCase):
     outputs. We test that:
       1. make_chain returns None for integration and find_action (unit-level).
       2. For the complementary check, make_chain returns a non-None string for
-         all intents in CHAINABLE (chat, memory, agent).
+         all intents in CHAINABLE (chat, memory).
       3. When we call make_variant 50 times on integration/find_action rows the
          results never contain " and then " (make_variant never splices chains in).
     """

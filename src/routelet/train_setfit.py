@@ -6,7 +6,7 @@ export_onnx.py can bake it into a runtime artifact.
 
 After saving the model a single temperature-scaling parameter T is fitted on a
 stratified 20% calibration split carved from the original (non-augmented) data
-files only (data/{agent,chat,find_action,integration,memory}.jsonl). T is
+files only (data/{chat,find_action,integration,memory}.jsonl). T is
 written to models/setfit/temperature.json so export_onnx.py can bake it into
 head.json for the Rust consumer.
 """
@@ -29,7 +29,6 @@ from routelet.preprocess import preprocess
 BASE = "BAAI/bge-small-en-v1.5"
 TRAIN_DIR = "data"
 ORIGINAL_FILES = [
-    "data/agent.jsonl",
     "data/chat.jsonl",
     "data/find_action.jsonl",
     "data/integration.jsonl",
@@ -255,7 +254,7 @@ def main() -> None:
         + (f" ({torch.cuda.get_device_name(0)})" if device == "cuda" else "")
     )
 
-    # class_weight="balanced" counters the over-firing on agent/find_action by
+    # class_weight="balanced" counters the over-firing on find_action by
     # up-weighting under-represented classes in the LR head.
     model = SetFitModel.from_pretrained(
         BASE,

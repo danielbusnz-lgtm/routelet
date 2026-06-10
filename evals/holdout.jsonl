@@ -30,29 +30,18 @@
 {"text": "make sure to save that my name is Bob", "intent": "memory"}
 {"text": "how old am I?", "intent": "memory"}
 {"text": "make sure you know that im 12?", "intent": "memory"}
-{"text": "open youtube, search for lofi, play the top result", "intent": "agent"}
-{"text": "find the cheapest flight to tokyo and book it", "intent": "agent"}
-{"text": "can you open up my email, then remember my email address", "intent": "agent"}
-{"text": "can you open up youtube and search the news", "intent": "agent"}
 {"text": "why is daddy donald trump such a bad president", "intent": "chat"}
 {"text": "whats up with the weather today, its like where is it?", "intent": "chat"}
-{"text": "open up my email and send me a message saying, what is the weather today?", "intent": "agent"}
 {"text": "save that my wifi password is danny byron", "intent": "memory"}
 {"text": "how do i set up my spotify integration?", "intent": "chat"}
 {"text": "show me where that skip next song on spotify button is", "intent": "find_action"}
 {"text": "find me the best restraunts nearby", "intent": "integration"}
 {"text": "show me where america is on the map", "intent": "integration"}
 {"text": "can you show me where the chat button is", "intent": "find_action"}
-{"text": "can you open up the uhh the google maps and then look at local kebab shops for me please thanks bro", "intent": "agent"}
-{"text": "can you skip this song and then play sicko mode on spotify", "intent": "agent"}
-{"text": "can you open up github on google and then go to my most recent repo plz", "intent": "agent"}
-{"text": "open github, press my profile, change name to daniel", "intent": "agent"}
-{"text": "find me some cool songs and then play that for me", "intent": "agent"}
 {"text": "talk about ur life", "intent": "chat"}
 {"text": "when does the sun come up", "intent": "chat"}
 {"text": "can you play remember my name", "intent": "integration"}
 {"text": "whats my name on spotify", "intent": "chat"}
-{"text": "open up a new tab on chrome and also try to type 123", "intent": "agent"}
 {"text": "dont forget to use the memory agent", "intent": "memory"}
 {"text": "my name is danny b and i was 11 then i turned 12 yesterday", "intent": "chat"}
 {"text": "if i asked you a question about myself what would you do?", "intent": "chat"}
@@ -74,20 +63,6 @@
 {"text": "um where do i go to click the report button", "intent": "find_action"}
 {"text": "select the bold option in the toolbar", "intent": "find_action"}
 {"text": "where's the reply all button in gmail", "intent": "find_action"}
-{"text": "open my email and forward the latest one to my boss", "intent": "agent"}
-{"text": "skip this track and then play sicko mode", "intent": "agent"}
-{"text": "open github, go to my repo, and delete the old branch", "intent": "agent"}
-{"text": "can you like check the weather and then text my mom if its gonna rain", "intent": "agent"}
-{"text": "uhh open spotify and then make me a new playlist for working out", "intent": "agent"}
-{"text": "search for a cheap flight to vegas and book the cheapest one", "intent": "agent"}
-{"text": "i was wondering if you could find a nearby gym and add it to my maps", "intent": "agent"}
-{"text": "pause the song and then turn up the volume bro", "intent": "agent"}
-{"text": "open my calendar and move my 3pm meeting to friday", "intent": "agent"}
-{"text": "find the top news story and then read it out to me plz", "intent": "agent"}
-{"text": "open whatsapp and reply to the last message from alex", "intent": "agent"}
-{"text": "look up a banana bread recipe and add the stuff to my shopping list", "intent": "agent"}
-{"text": "um can you open youtube search lofi and then play the first one", "intent": "agent"}
-{"text": "take a screenshot and then send it to my email", "intent": "agent"}
 {"text": "is it possible to skip songs on spotify", "intent": "chat"}
 {"text": "talk me through sending an email to someone", "intent": "chat"}
 {"text": "how would i go about checking my email", "intent": "chat"}
@@ -139,22 +114,6 @@
 {"text": "press the floating compose pencil bottom right", "intent": "find_action"}
 {"text": "where is the the toggle for two factor on this page", "intent": "find_action"}
 {"text": "click the apply coupon link at checkout", "intent": "find_action"}
-{"text": "open my notes find the grocery one and add paper towels", "intent": "agent"}
-{"text": "uhh check the traffic and if its bad leave a note for my carpool", "intent": "agent"}
-{"text": "look up tonights nba scores and drop them in the family chat", "intent": "agent"}
-{"text": "pull up sarahs number from contacts then call her", "intent": "agent"}
-{"text": "open figma duplicate this frame and rename it draft two", "intent": "agent"}
-{"text": "find a barber open late and stick it in my calendar plz", "intent": "agent"}
-{"text": "mute notifications and then start my pomodoro timer", "intent": "agent"}
-{"text": "check my steps for today and if im under ten thousand remind me to walk", "intent": "agent"}
-{"text": "um open the pdf scroll to page twelve and read me that part", "intent": "agent"}
-{"text": "grab the wifi name from settings and text it to my guest", "intent": "agent"}
-{"text": "open linkedin find the recruiter who messaged me and reply thanks", "intent": "agent"}
-{"text": "look at my fridge inventory and order whatever im out of", "intent": "agent"}
-{"text": "find a quiet cafe with wifi and navigate me there then mute my phone", "intent": "agent"}
-{"text": "scan this receipt log the total and file it under march expenses", "intent": "agent"}
-{"text": "open youtube find that tutorial i watched and add it to watch later", "intent": "agent"}
-{"text": "check who texted me last and read it back then mark it read", "intent": "agent"}
 {"text": "lower the thermostat a couple degrees", "intent": "integration"}
 {"text": "uhh order me an uber to the office", "intent": "integration"}
 {"text": "whens sunset tonight", "intent": "integration"}

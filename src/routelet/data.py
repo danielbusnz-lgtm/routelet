@@ -11,10 +11,14 @@ from pathlib import Path
 
 
 class Intent(StrEnum):
-    """The label set. The first five are the real intents (definitions and
+    """The label set. The first four are the real intents (definitions and
     boundary rules in docs/taxonomy.md). NONE is the reject class: out-of-
     distribution or garbled input the router should not act on, used to give the
     model an explicit "I don't know" instead of confidently mislabeling junk.
+
+    `agent` is no longer a label: Peeky enters agent mode only on an explicit
+    spoken cue ("peeky agent ..."), recognized before classification, so the
+    router never decides it.
 
     StrEnum gives two things we rely on: members serialize as plain strings, and
     Intent("typo") raises ValueError, which is how labels get validated on load.
@@ -24,7 +28,6 @@ class Intent(StrEnum):
     INTEGRATION = "integration"
     CHAT = "chat"
     MEMORY = "memory"
-    AGENT = "agent"
     NONE = "none"
 
 
