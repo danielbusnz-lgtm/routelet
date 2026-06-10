@@ -1,16 +1,16 @@
 {
-  "eval_n": 200,
+  "eval_n": 159,
   "tfidf": {
-    "accuracy": 0.69
+    "accuracy": 0.6855345911949685
   },
   "setfit": {
-    "accuracy": 0.92
+    "accuracy": 0.9371069182389937
   },
   "gate": {
     "threshold": 0.55,
-    "in_distribution_kept_share": 0.995,
+    "in_distribution_kept_share": 0.987,
     "ood_deferred_share": 0.0,
-    "kept_accuracy": 0.925
+    "kept_accuracy": 0.936
   },
   "haiku": {
     "model": "claude-haiku-4-5",
@@ -50,6 +50,6 @@
         "support": 41
       }
     },
-    "stale": false
+    "stale": true
   }
 }
