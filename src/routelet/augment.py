@@ -3,7 +3,7 @@
 Real Aegis input is spoken, so it is disfluent: fillers ("uhh", "like"), hedges
 ("i was wondering if you could"), dropped apostrophes, self-corrections, run-ons.
 The clean synthetic training set does not look like that, which is the documented
-distribution gap behind the chat->integration and agent->integration leaks.
+distribution gap behind the chat->integration leak.
 
 This module applies conservative, label-preserving string transforms to existing
 labeled rows and writes the results to a SEPARATE file, data/augmented.jsonl, so
@@ -23,15 +23,15 @@ from routelet.data import Intent, load
 DATA_DIR = Path("data")
 HOLDOUT = Path("evals/holdout.jsonl")
 OUT = DATA_DIR / "augmented.jsonl"
-SOURCES = ["agent", "chat", "find_action", "integration", "memory"]
+SOURCES = ["chat", "find_action", "integration", "memory"]
 VARIANTS_PER_ROW = 2
 
-# Chaining one utterance to another with "and then" turns one action into two,
-# which flips integration/find_action into agent. So same-class chaining is only
-# label-safe for classes where two instances stay the same intent: chat (still
-# chat), memory (still memory), and agent (already multi-step). It is NOT safe
-# for integration or find_action.
-CHAINABLE = {Intent.CHAT, Intent.MEMORY, Intent.AGENT}
+# Chaining one utterance to another with "and then" turns one action into two.
+# With the agent class gone the label fate of a chained integration or
+# find_action is an open taxonomy question, so chaining stays restricted to the
+# classes where two instances are unambiguously the same intent: chat (still
+# chat) and memory (still memory).
+CHAINABLE = {Intent.CHAT, Intent.MEMORY}
 
 FILLERS = ["uh", "uhh", "um", "like", "you know", "i mean"]
 HEDGES = ["can you", "i was wondering if you could", "hey can u", "could you"]
@@ -82,6 +82,28 @@ def _drop_punct(text: str) -> str:
     return text.rstrip(".?!").rstrip()
 
 
+# First words that mark an utterance as question-shaped, plus the trailing
+# tag-question "right". Used to decide which rows may get a "?" variant: STT
+# (Deepgram smart formatting) appends "?" to spoken questions, but the clean
+# training rows almost never carry one, so without these variants the model
+# would meet terminal "?" for the first time in production.
+_QUESTION_STARTS = frozenset(
+    "what whats where wheres when why how who whos can could do does did "
+    "is are am will would should have has any anything".split()
+)
+
+
+def _is_question_shaped(text: str) -> bool:
+    words = text.split()
+    if not words:
+        return False
+    return words[0] in _QUESTION_STARTS or words[-1].rstrip("?") == "right"
+
+
+def _append_question_mark(text: str) -> str:
+    return text.rstrip("?").rstrip() + "?"
+
+
 def make_variant(text: str, intent: Intent, rng: random.Random) -> str:
     """Build one disfluent, label-preserving variant of a clean utterance.
 
@@ -100,6 +122,10 @@ def make_variant(text: str, intent: Intent, rng: random.Random) -> str:
         out = _append_tail(out, rng)
     if rng.random() < 0.40:
         out = _drop_punct(out)
+    # Shape test runs on the source text, not `out`: a prepended hedge ("can
+    # you ...") would make every row look interrogative.
+    if _is_question_shaped(text) and rng.random() < 0.50:
+        out = _append_question_mark(out)
     return re.sub(r"\s+", " ", out).strip()
 
 

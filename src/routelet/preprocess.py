@@ -3,8 +3,12 @@
 Rules applied in order:
   1. Lowercase. The training corpus is all lowercase; STT output is mixed-case,
      so normalizing here closes the train/serve surface skew.
-  2. Strip terminal punctuation (trailing whitespace and .!? runs). STT appends
-     periods and question marks the training data never had.
+  2. Strip terminal punctuation (trailing whitespace and .! runs), but keep a
+     terminal question mark, normalized to exactly one. STT appends periods the
+     training data never had, those are noise. A terminal "?" is signal: it
+     marks the question register (capability checks, tag questions) that
+     otherwise embeds like a command. The augmenter emits "?" variants of
+     question-shaped training rows so the signal exists at training time too.
   3. Secret keyword tail: mask everything after a secret keyword with <SECRET>.
   4. Email addresses -> <EMAIL>.
   5. Digit runs of length >= 4 -> <NUM>.
@@ -26,8 +30,12 @@ _NUM = re.compile(r"\b\d{4,}\b")
 def preprocess(text: str) -> str:
     """Normalize text before encoding. Safe to call without knowing the intent."""
     text = text.lower()
+    tail = _TERMINAL_PUNCT.search(text)
+    is_question = tail is not None and "?" in tail.group()
     text = _TERMINAL_PUNCT.sub("", text)
     text = _SECRET.sub(lambda m: m.group(1) + " <SECRET>", text)
     text = _EMAIL.sub("<EMAIL>", text)
     text = _NUM.sub("<NUM>", text)
+    if is_question:
+        text += "?"
     return text
