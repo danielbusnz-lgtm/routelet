@@ -1,0 +1,42 @@
+{"text": "kill the wifi for a sec", "intent": "integration"}
+{"text": "flip my mac to dark mode", "intent": "integration"}
+{"text": "facetime grandma", "intent": "integration"}
+{"text": "get me directions to logan airport", "intent": "integration"}
+{"text": "whats sitting on my clipboard", "intent": "integration"}
+{"text": "run my wind down shortcut", "intent": "integration"}
+{"text": "fire up slack", "intent": "integration"}
+{"text": "shut down zoom i'm done with calls", "intent": "integration"}
+{"text": "text my landlord that the sink is fixed", "intent": "integration"}
+{"text": "whats my sister's number", "intent": "integration"}
+{"text": "throw on some lofi on apple music", "intent": "integration"}
+{"text": "do i have any unread mail", "intent": "integration"}
+{"text": "pull up my hiking album", "intent": "integration"}
+{"text": "advance to the next slide", "intent": "integration"}
+{"text": "kick off the slideshow", "intent": "integration"}
+{"text": "pop open my downloads", "intent": "integration"}
+{"text": "toss that screenshot in the trash", "intent": "integration"}
+{"text": "dig up that lease pdf from last year", "intent": "integration"}
+{"text": "hunt down the budget spreadsheet on my disk", "intent": "integration"}
+{"text": "whats my day look like on the calendar", "intent": "integration"}
+{"text": "pencil in a standup for tomorrow morning", "intent": "integration"}
+{"text": "swap my wallpaper to something darker", "intent": "integration"}
+{"text": "don't let the screen sleep during the download", "intent": "integration"}
+{"text": "lock it up i'm stepping out", "intent": "integration"}
+{"text": "uh can you find my cover letter file", "intent": "integration"}
+{"text": "find the search bar", "intent": "find_action"}
+{"text": "click the next button", "intent": "find_action"}
+{"text": "where is the wifi icon in the menu bar", "intent": "find_action"}
+{"text": "click on the file in the sidebar", "intent": "find_action"}
+{"text": "find the dark mode toggle on this page", "intent": "find_action"}
+{"text": "scroll to the directions section", "intent": "find_action"}
+{"text": "click the slideshow button", "intent": "find_action"}
+{"text": "where's the trash icon", "intent": "find_action"}
+{"text": "click the calendar tab", "intent": "find_action"}
+{"text": "find the send button", "intent": "find_action"}
+{"text": "can you see my screen", "intent": "chat"}
+{"text": "do you see whats on my display", "intent": "chat"}
+{"text": "you can see my screen right?", "intent": "chat"}
+{"text": "you can play songs right?", "intent": "chat"}
+{"text": "you can remember my name right?", "intent": "chat"}
+{"text": "will you skip this song?", "intent": "integration"}
+{"text": "can you turn the volume down a bit?", "intent": "integration"}
