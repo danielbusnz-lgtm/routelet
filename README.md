@@ -2,7 +2,7 @@
 
 A tiny fine-tuned intent router. Classify text into a fixed set of intents in milliseconds, on-device, instead of paying for an LLM call every time you need to decide *what kind* of request something is.
 
-The first real user is [Aegis](https://github.com/danielbusnz-lgtm/aegis), a voice assistant that routes each command into one of five paths. Doing that with a Claude call adds latency, which is rough for voice. A small fine-tuned classifier does the same job an order of magnitude faster, for free, and offline.
+The first real user is [Aegis](https://github.com/danielbusnz/aegis), a voice assistant that routes each command into one of five paths. Doing that with a Claude call adds latency, which is rough for voice. A small fine-tuned classifier does the same job an order of magnitude faster, for free, and offline.
 
 Early days. The plan:
 
